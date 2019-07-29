@@ -1,23 +1,22 @@
 package org.activiti.spring.conformance.set3;
 
+import java.util.List;
+
 import org.activiti.api.process.model.ProcessDefinition;
-import org.activiti.api.process.model.ProcessDefinitionMeta;
 import org.activiti.api.process.runtime.ProcessRuntime;
 import org.activiti.api.process.runtime.conf.ProcessRuntimeConfiguration;
 import org.activiti.api.process.runtime.events.listener.ProcessRuntimeEventListener;
 import org.activiti.api.runtime.shared.events.VariableEventListener;
 import org.activiti.api.runtime.shared.query.Page;
 import org.activiti.api.runtime.shared.query.Pageable;
+import org.activiti.spring.conformance.util.security.SecurityUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.activiti.spring.conformance.util.security.SecurityUtil;
 
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
@@ -41,8 +40,8 @@ public class ConformanceBasicProcessRuntimeTest {
         List<ProcessRuntimeEventListener<?>> processRuntimeEventListeners = configuration.processEventListeners();
         List<VariableEventListener<?>> variableEventListeners = configuration.variableEventListeners();
         //then
-        assertThat(processRuntimeEventListeners).hasSize(10);
-        assertThat(variableEventListeners).hasSize(3);
+        assertThat(processRuntimeEventListeners).isNotEmpty();
+        assertThat(variableEventListeners).isNotEmpty();
 
     }
 

@@ -55,7 +55,7 @@ public class RuntimeTestConfiguration {
     public static Set<TaskCandidateUserAddedEvent> taskCandidateUserAddedEvents = new HashSet<>();
 
     public static Set<TaskCandidateUserRemovedEvent> taskCandidateUserRemovedEvents = new HashSet<>();
-
+    
     @Bean
     public UserDetailsService myUserDetailsService() {
         ExtendedInMemoryUserDetailsManager extendedInMemoryUserDetailsManager = new ExtendedInMemoryUserDetailsManager();
@@ -67,6 +67,11 @@ public class RuntimeTestConfiguration {
         extendedInMemoryUserDetailsManager.createUser(new User("salaboy",
                                                                "password",
                                                                salaboyAuthorities));
+
+        extendedInMemoryUserDetailsManager.createUser(new User("user",
+                                                               "password",
+                                                               salaboyAuthorities));
+
 
         List<GrantedAuthority> adminAuthorities = new ArrayList<>();
         adminAuthorities.add(new SimpleGrantedAuthority("ROLE_ACTIVITI_ADMIN"));
@@ -108,7 +113,7 @@ public class RuntimeTestConfiguration {
         };
     }
 
-    @Bean(name = "processImageConnectorId.processImageActionId")
+    @Bean(name = "Process Image Connector.processImageActionName")
     public Connector processImageActionName() {
         return integrationContext -> {
             Map<String, Object> inBoundVariables = integrationContext.getInBoundVariables();
@@ -123,7 +128,7 @@ public class RuntimeTestConfiguration {
         };
     }
 
-    @Bean(name = "tagImageConnectorId.tagImageActionId")
+    @Bean(name = "Tag Image Connector.tagImageActionName")
     public Connector tagImageActionName() {
         return integrationContext -> {
             Map<String, Object> inBoundVariables = integrationContext.getInBoundVariables();
@@ -173,7 +178,7 @@ public class RuntimeTestConfiguration {
     public BPMNElementEventListener<BPMNSequenceFlowTakenEvent> sequenceFlowTakenEventListener() {
         return sequenceFlowTakenEvent -> sequenceFlowTakenEvents.add(sequenceFlowTakenEvent);
     }
-
+    
     @Bean
     public VariableEventListener<VariableCreatedEvent> variableCreatedEventFromProcessInstanceListener() {
         return variableCreatedEvent -> {
@@ -194,7 +199,7 @@ public class RuntimeTestConfiguration {
         return candidateUserRemovedEvent -> taskCandidateUserRemovedEvents.add(candidateUserRemovedEvent);
     }
 
-    @Bean(name = "variableMappingConnectorId.variableMappingActionId")
+    @Bean(name = "Variable Mapping Connector.variableMappingActionName")
     public Connector variableMappingActionName() {
         return integrationContext -> {
             Map<String, Object> inBoundVariables = integrationContext.getInBoundVariables();
@@ -202,10 +207,7 @@ public class RuntimeTestConfiguration {
             String variableOne = "input-variable-name-1";
             String variableTwo = "input-variable-name-2";
             String variableThree = "input-variable-name-3";
-
-            //this variable is not mapped, but its name matches with a process variable
-            //so value will be provided from process variable
-            String unmappedMatchingVariable = "input-unmapped-variable-with-matching-name";
+            String staticValue = "input-static-value";
 
             Integer currentAge = (Integer) inBoundVariables.get(variableTwo);
             Integer offSet = (Integer) inBoundVariables.get(variableThree);
@@ -220,9 +222,9 @@ public class RuntimeTestConfiguration {
                                   20),
                             tuple(variableThree,
                                   5),
-                            tuple(unmappedMatchingVariable,
-                                  "inTest"));
-
+                            tuple(staticValue,
+                                  "a static value"));
+            
             integrationContext.addOutBoundVariable("out-variable-name-1",
                                                    "outName");
             integrationContext.addOutBoundVariable("out-variable-name-2",
